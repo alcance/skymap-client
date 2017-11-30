@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 
 import { AgmCoreModule } from '@agm/core';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AgmCoreModule } from '@agm/core';
     HttpModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDKaIylUXhUTGqWF63kWkr4w0hrUTPHX2k'
-    })
+    }),
+    AgmSnazzyInfoWindowModule
   ],
   providers: [],
   bootstrap: [AppComponent]

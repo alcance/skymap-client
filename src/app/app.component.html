@@ -5,12 +5,16 @@
   </h1>
   <agm-map [latitude]="lat" [longitude]="lng">
     <agm-marker
-      *ngFor="let m of markers; let i = index"  
+      *ngFor="let m of markers.data; let i = index"  
       [latitude]="m.lat" 
       [longitude]="m.lng">
+      <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
+        <ng-template>
+          Testing
+        </ng-template>
+      </agm-snazzy-info-window>
     </agm-marker>
   </agm-map>
   
   <button (click)="sendLocation()">Send Location</button>
 </div>
-

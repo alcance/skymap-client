@@ -19,9 +19,12 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/snazzy-info-window/dist/snazzy-info-window.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/chance/chance.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
