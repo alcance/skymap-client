@@ -9,10 +9,15 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 
 export class AppComponent implements OnInit{
-  socket: SocketIOClient.Socket;
+  private socket;
 
   constructor() {
     this.socket = io.connect('0.0.0.0:8001');
+  }
+
+  sendLocation() {
+    console.log('emiting..');
+    this.socket.emit('locations', 'Is anybody outhere');
   }
   
   title = 'Skymap';
