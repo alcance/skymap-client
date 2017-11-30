@@ -11,9 +11,8 @@ import * as chance from 'chance';
 })
 
 export class AppComponent implements OnInit {
-  private socket;
+  socket: any;
   private chance;
-  markers: marker[] = [];
 
   constructor(private _appService: AppService) {
     this.socket = io.connect('0.0.0.0:8001');
@@ -24,20 +23,62 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this._appService.getLocations()
       .subscribe(responseAppData => this.markers = responseAppData);
-  }
 
-  getRandomLoc(from, to, fixed) {
-    return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+
+        this._appService.postLocation({
+          "lat": position.coords.latitude, 
+          "lng": position.coords.longitude, 
+          "label": "w00t", 
+          "draggable": false,
+          "socketId": this.socket.id,
+        }).subscribe();
+      });
+    }
+    this.socket.on('added-location', (data) => {
+      this.markers.push(data[0]);
+    });
+
+    this.socket.on('disconnected', (data) => {
+      this.markers = this.markers.filter((location) => {
+        return location['socketId'] === data;
+      });
+    })
   }
 
   sendLocation() {
-    this.socket.emit('locations', {"lat": this.chance.latitude(), "lng": this.chance.altitude(), "label": "w00t", "draggable": false});
+    this.postLocation({
+      "lat": this.chance.latitude(),
+      "lng": this.chance.longitude(),
+      "label": "w00t",
+      "draggable": false
+    })
   }
-  
+
+  postLocation(loc) {
+    this._appService.postLocation({
+      "lat": loc.lat, 
+      "lng": loc.lng, 
+      "label": loc.label,
+      "draggable": false
+    }).subscribe();
+  }
+
+  fetchLocations() {
+    this._appService.fetchLocations()
+      .subscribe(() => {
+        debugger;
+      })
+  }
+
   title = 'Skymap';
-  lat: number = 31.015279;
-  lng: number = -80.523438;
   zoom: 9;
+  lat;
+  lng;
+  markers: marker[] = [];
 }
 interface marker {
   lat: number;

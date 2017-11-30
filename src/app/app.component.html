@@ -5,7 +5,7 @@
   </h1>
   <agm-map [latitude]="lat" [longitude]="lng">
     <agm-marker
-      *ngFor="let m of markers.data; let i = index"  
+      *ngFor="let m of markers; let i = index"  
       [latitude]="m.lat" 
       [longitude]="m.lng">
       <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
@@ -14,7 +14,11 @@
         </ng-template>
       </agm-snazzy-info-window>
     </agm-marker>
+    <agm-marker [latitude]="lat" [longitude]="lng">
+    </agm-marker>
   </agm-map>
   
-  <button (click)="sendLocation()">Send Location</button>
+  
+  <button (click)="sendLocation()">Send Random Location</button>
+  <button (click)="fetchLocations()">Fetch data from Google Places</button>
 </div>

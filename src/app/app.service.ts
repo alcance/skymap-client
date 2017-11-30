@@ -13,4 +13,13 @@ export class AppService {
       .map((response:Response) => response.json());
   }
 
+  fetchLocations() {
+    return this._http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=23.289165516865257,-102.08124999999995&radius=50000&type=restaurant&key=AIzaSyBqzk9xJicW_YPEJV9P1NTKeKc4hQtiC6o')
+      .map((response:Response) => response.json())
+  }
+
+  postLocation(location) {
+    return this._http.post(this._url + '/add/', location);
+  }
+
 }
