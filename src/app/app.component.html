@@ -1,24 +1,30 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light" role="navigation">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#"><h2><i class="fa fa-map-marker" aria-hidden="true"></i> {{ title }}</h2></a>
+  </div>
+  <div>
+      <span class="navbar-right">
+          <h2><span class="badge badge-pill badge-primary">{{markers.length}}</span></h2>
+      </span>
+  </div>
+</nav>
+
 <div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}
-  </h1>
-  <agm-map [latitude]="lat" [longitude]="lng">
+  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
     <agm-marker
-      *ngFor="let m of markers; let i = index"  
+      *ngFor="let m of markers; let i = index"
       [latitude]="m.lat" 
       [longitude]="m.lng">
       <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
         <ng-template>
-          Testing
+          Name: {{m.label}} <br>
+          {{m.isOpen}}
         </ng-template>
       </agm-snazzy-info-window>
     </agm-marker>
     <agm-marker [latitude]="lat" [longitude]="lng">
     </agm-marker>
   </agm-map>
-  
-  
-  <button (click)="sendLocation()">Send Random Location</button>
-  <button (click)="fetchLocations()">Fetch data from Google Places</button>
 </div>
+<button type="button" (click)="sendLocation()" class="btn btn-primary btn-lg btn-block">Send Random Location</button>
+<!-- <button (click)="fetchLocations()" type="button" class="btn btn-outline-primary">Fetch data from Google Places</button> -->

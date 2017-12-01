@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     this.chance = chance();
   }
   
+  
   // Subscribe to Service
   ngOnInit() {
     this._appService.getLocations()
@@ -32,9 +33,9 @@ export class AppComponent implements OnInit {
         this._appService.postLocation({
           "lat": position.coords.latitude, 
           "lng": position.coords.longitude, 
-          "label": "w00t", 
           "draggable": false,
           "socketId": this.socket.id,
+          "isUser": true,
         }).subscribe();
       });
     }
@@ -44,17 +45,18 @@ export class AppComponent implements OnInit {
 
     this.socket.on('disconnected', (data) => {
       this.markers = this.markers.filter((location) => {
-        return location['socketId'] === data;
+        return location['socketId'] !== data && !location['isUser'];
       });
     })
   }
 
   sendLocation() {
     this.postLocation({
-      "lat": this.chance.latitude(),
-      "lng": this.chance.longitude(),
-      "label": "w00t",
-      "draggable": false
+      "lat": Math.random() * (this.lat - this.lng) + this.lng,
+      "lng": Math.random() * (this.lat - this.lng) + this.lng,
+      "draggable": false,
+      "isUser": false,
+      "isOpen": Math.random() >= 0.5 ? 'Open Now' : 'Closed'
     })
   }
 
@@ -63,19 +65,18 @@ export class AppComponent implements OnInit {
       "lat": loc.lat, 
       "lng": loc.lng, 
       "label": loc.label,
-      "draggable": false
+      "draggable": false,
+      "isOpen": loc.isOpen
     }).subscribe();
   }
 
   fetchLocations() {
     this._appService.fetchLocations()
-      .subscribe(() => {
-        debugger;
-      })
+      .subscribe(responseAppData => console.log(responseAppData));
   }
 
   title = 'Skymap';
-  zoom: 9;
+  zoom: number =  7;
   lat;
   lng;
   markers: marker[] = [];
@@ -85,4 +86,5 @@ interface marker {
   lng: number;
   label?: string;
   draggable: boolean;
+  isOpen: string
 }
